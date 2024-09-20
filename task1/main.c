@@ -1,4 +1,4 @@
-#include "functions.c"
+#include "functions.h"
 
 int main(int argc, char *argv[])
 {
@@ -125,6 +125,7 @@ int main(int argc, char *argv[])
         }
         putchar('\n');
         free(res_s);
+        break;
 
     default:
         printf("Введённого параметра не существует\n");

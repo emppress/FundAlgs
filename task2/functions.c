@@ -4,11 +4,11 @@ status string_to_double(const char *str, double *result)
 {
     char *endinp;
     *result = strtold(str, &endinp);
-    if (errno == ERANGE && (*result == HUGE_VALL || *result == (-HUGE_VAL)))
+    if (*result == HUGE_VALL || *result == (-HUGE_VAL))
         return INPUT_ERROR;
     if (*endinp != '\0')
         return INPUT_ERROR;
-    if (errno != 0 && *result == 0)
+    if (*result == 0)
         return INPUT_ERROR;
     return OK;
 }
@@ -212,21 +212,25 @@ status y_limit(double eps, double *result)
 
 status y_row(double eps, double *result)
 {
-    double cur = 0.5, sq = 0, prev = 0;
+    double previous = 0;
+    double current = 0.5;
     int k = 2;
+    double l = 0;
     do
     {
-        prev = cur;
+        previous = current;
         k++;
-        sq = sqrt(k);
-        if (fmod(sq, 1.0) == 0)
+        l = sqrt(k);
+        if (fmod(l, 1.0) == 0)
         {
             k++;
-            sq = (int)pow(k, 0.5);
+            l = (int)pow(k, 1.0 / 2.0);
         }
-        cur += 1.0 / pow((int)sq, 2.0) - 1.0 / k;
-    } while (fabs(prev - cur) >= eps);
-    *result = (cur - (pow(PI, PI) / 6));
+        current += 1.0 / pow((int)l, 2.0) - 1.0 / k;
+
+    } while (fabs(previous - current) >= eps);
+
+    *result = (current - pow(PI, 2) / 6);
     return OK;
 }
 

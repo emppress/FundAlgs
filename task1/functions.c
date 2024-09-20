@@ -122,13 +122,19 @@ status degree_table(const long x)
 
 status split_16(long x, char **result, int *size)
 {
+    int flag = 0;
     int capacity = 4;
     (*size) = 0;
     char *resize = NULL;
     char *reverse_result = (char *)malloc(capacity * sizeof(char));
-
     if (reverse_result == NULL)
         return MEMORY_ERROR;
+
+    if (x < 0)
+    {
+        flag = 1;
+        x *= -1;
+    }
 
     while (x)
     {
@@ -143,6 +149,8 @@ status split_16(long x, char **result, int *size)
             reverse_result = resize;
         }
     }
+    if (flag)
+        reverse_result[(*size)] = '-';
 
     *result = (char *)malloc((*size) * sizeof(char));
     if (*result == NULL)

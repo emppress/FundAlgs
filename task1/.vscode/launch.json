@@ -8,7 +8,7 @@
             "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
             "args": [
                 "-s",
-                "999999453"
+                "-100000007"
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

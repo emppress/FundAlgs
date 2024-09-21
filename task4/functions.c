@@ -66,7 +66,7 @@ void replace_symbols(FILE *in, FILE *out)
             i = 0;
             while (c)
             {
-                num_base16[i++] = (c % 16 > 9) ? c % 16 - 10 + 'A' : c % 16 + '0';
+                num_base16[i++] = ((c % 16 > 9) ? (c % 16 - 10 + 'A') : (c % 16 + '0'));
                 c /= 16;
             }
             if (i > 0)

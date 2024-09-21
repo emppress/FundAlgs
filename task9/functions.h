@@ -2,7 +2,6 @@
 #define FUNCTIONS_H_
 
 #include "stdio.h"
-#include <errno.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>

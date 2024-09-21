@@ -2,18 +2,23 @@
 
 status string_to_int(const char *str, long *result)
 {
-    errno = 0;
-    char *endptr;
-    *result = strtol(str, &endptr, 10);
-    if (errno == ERANGE && (*result == LONG_MAX || *result == LONG_MIN))
+    char *endinp;
+    for (int i = 0; i < strlen(str); i++)
+    {
+        if ((str[i] < '0' || str[i] > '9') && !(str[i] == '-' && i == 0))
+            return INPUT_ERROR;
+    }
+    *result = strtol(str, &endinp, 10);
+    if (*result == LONG_MAX || *result == LONG_MIN)
         return INPUT_ERROR;
-    if (errno != 0 && *result == 0 || *endptr != '\0')
+    if (*endinp != '\0')
         return INPUT_ERROR;
     return OK;
 }
 
 void generate_static_array(long array[], long a, long b)
 {
+    srand(time(NULL));
     for (int i = 0; i < CAPACITY; i++)
     {
         array[i] = rand() % (b - a + 1) + a;
@@ -39,6 +44,7 @@ void swap_min_max(long array[])
 
 status generate_dynamic_array(int **array, int size_array)
 {
+    srand(time(NULL));
     *array = malloc(size_array * sizeof **array);
     if (*array == NULL)
         return MEMORY_ERROR;

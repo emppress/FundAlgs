@@ -28,8 +28,25 @@ int main(int argc, char *argv[])
                 free(num_array);
                 return INPUT_ERROR;
             }
-            printf("%lld\n", max_num);
-            return OK;
+
+            char *num_new_base = malloc(22 * sizeof *num_new_base);
+            if (num_new_base == NULL)
+            {
+                printf("Ошибка ввода\n");
+                return INPUT_ERROR;
+            }
+            convert_to_xbase(max_num, base, num_new_base);
+            printf("In %d: %s\n", base, num_new_base);
+            convert_to_xbase(max_num, 9, num_new_base);
+            printf("In 9: %s\n", num_new_base);
+            convert_to_xbase(max_num, 18, num_new_base);
+            printf("In 18: %s\n", num_new_base);
+            convert_to_xbase(max_num, 27, num_new_base);
+            printf("In 27: %s\n", num_new_base);
+            convert_to_xbase(max_num, 36, num_new_base);
+            printf("In 36: %s\n", num_new_base);
+            free(num_new_base);
+            break;
         }
 
         else
@@ -40,9 +57,12 @@ int main(int argc, char *argv[])
                 free(num_array);
                 return INPUT_ERROR;
             }
-            if (llabs(num_base10) > max_num)
-                max_num = llabs(num_base10);
+            if (llabs(num_base10) > llabs(max_num))
+            {
+                max_num = num_base10;
+            }
         }
     }
     free(num_array);
+    return OK;
 }

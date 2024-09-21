@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
         for (int i = 0; i < size; i++)
         {
-            printf("уравнение %d) %.3lfx^2 + %.3lfx + %.3lf\n", i + 1, permutations[i][0], permutations[i][1], permutations[i][2]);
+            printf("уравнение %d) %.3lfx^2 + %.3lfx + %.3lf = 0\n", i + 1, permutations[i][0], permutations[i][1], permutations[i][2]);
             double a = permutations[i][0];
             double b = permutations[i][1];
             double c = permutations[i][2];

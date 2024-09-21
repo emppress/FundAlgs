@@ -3,41 +3,36 @@
 status string_to_int(const char *str, long *result)
 {
     char *endinp;
+    for (int i = 0; i < strlen(str); i++)
+    {
+        if ((str[i] < '0' || str[i] > '9') && !(str[i] == '-' && i == 0))
+            return INPUT_ERROR;
+    }
     *result = strtol(str, &endinp, 10);
-    if (errno == ERANGE && (*result == LONG_MAX || *result == LONG_MIN))
-    {
+    if (*result == LONG_MAX || *result == LONG_MIN)
         return INPUT_ERROR;
-    }
     if (*endinp != '\0')
-    {
         return INPUT_ERROR;
-    }
-    if (errno != 0 && *result == 0)
-    {
-        return INPUT_ERROR;
-    }
     return OK;
 }
 
 status string_to_double(const char *str, double *result)
 {
-    char *endinp;
-    *result = strtold(str, &endinp);
-    if (errno == ERANGE && (*result == HUGE_VALL || *result == (-HUGE_VAL)))
+    int flag = 0;
+    for (int i = 0; i < strlen(str); i++)
     {
-        printf("Ошибка ввода");
-        return INPUT_ERROR;
+        if (str[i] == '.')
+        {
+            if (flag)
+                return INPUT_ERROR;
+            flag = 1;
+        }
+
+        else if ((str[i] < '0' || str[i] > '9') && !(str[i] == '-' && i == 0))
+            return INPUT_ERROR;
     }
-    if (*endinp != '\0')
-    {
-        printf("Ошибка ввода");
+    if (sscanf(str, "%lf", result) != 1)
         return INPUT_ERROR;
-    }
-    if (errno != 0 && *result == 0)
-    {
-        printf("Ошибка ввода");
-        return INPUT_ERROR;
-    }
     return OK;
 }
 

@@ -7,8 +7,8 @@
             "request": "launch",
             "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
             "args": [
-                "-s",
-                "-100000007"
+                "-f",
+                "16",
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

@@ -4,7 +4,7 @@ int main(int argc, char *argv[])
 {
     if (argc != 3 || !(argv[1][0] == '-' || argv[1][0] == '/') && argv[1][2] == '\0')
     {
-        printf("Ошибка ввода");
+        printf("Ошибка ввода\n");
         return INPUT_ERROR;
     }
 
@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
     errno = 0;
     if (string_to_int(argv[2], &num) != OK)
     {
+        printf("Ошибка ввода\n");
         return INPUT_ERROR;
     }
 
@@ -53,11 +54,6 @@ int main(int argc, char *argv[])
         break;
 
     case 'p':
-        if (num < 0)
-        {
-            printf("Ошибка ввода\n");
-            return INPUT_ERROR;
-        }
         int res_p = is_prime(num);
         if (res_p == 0)
         {
@@ -75,6 +71,12 @@ int main(int argc, char *argv[])
         break;
 
     case 'a':
+        if (num < 1)
+        {
+            printf("Ошибка ввода\n");
+            return MEMORY_ERROR;
+        }
+
         long long res_a = 0;
         if (sum(num, &res_a) == MEMORY_ERROR)
         {
@@ -105,9 +107,10 @@ int main(int argc, char *argv[])
     case 'e':
         if (degree_table(num) == INPUT_ERROR)
         {
-            printf("Oшибка ввода:\n");
+            printf("Oшибка ввода\n");
             return INPUT_ERROR;
         }
+        break;
 
     case 's':
         int size_s;

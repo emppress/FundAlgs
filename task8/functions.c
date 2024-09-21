@@ -53,12 +53,12 @@ status read_num_from_file(FILE *file, char *word, int *len_word, int *base)
 
 status convert_xbase_to_ll(const char *const word, int base, long long *result)
 {
-    errno = 0;
+
     char *endptr;
     *result = strtoll(word, &endptr, base);
-    if (errno == ERANGE && (*result == LLONG_MAX || *result == LLONG_MIN))
+    if (*result == LLONG_MAX || *result == LLONG_MIN)
         return INPUT_ERROR;
-    else if (errno == 0 && *result == 0 || *endptr != '\000')
+    else if (*endptr != '\000')
         return INPUT_ERROR;
 
     return OK;

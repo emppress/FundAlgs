@@ -2,11 +2,6 @@
 
 int main(int argc, char *argv[])
 {
-    if (argc != 5 && argc != 4)
-    {
-        printf("Ошибка ввода\n");
-        return INPUT_ERROR;
-    }
     if (!((argv[1][0] == '-' || argv[1][0] == '/') && argv[1][2] == '\0'))
     {
         printf("Ошибка ввода\n");
@@ -19,15 +14,9 @@ int main(int argc, char *argv[])
     switch (argv[1][1])
     {
     case 'r':
-        if (argc != 5)
-        {
-            printf("Ошибка ввода\n");
-            return INPUT_ERROR;
-        }
-
         FILE *file1 = fopen(argv[2], "r");
         FILE *file2 = fopen(argv[3], "r");
-        FILE *file_result = fopen(argv[4], "w");
+        FILE *file_result = fopen(argv[argc - 1], "w");
         if (file1 == NULL || file2 == NULL || file_result == NULL)
         {
             printf("Ошибка открытия файла\n");
@@ -42,7 +31,7 @@ int main(int argc, char *argv[])
 
         while (!feof(file1) && !feof(file2))
         {
-            if (read_word_from_file(file2, &word, &len_word) == MEMORY_ERROR)
+            if (read_word_from_file(file1, &word, &len_word) == MEMORY_ERROR)
             {
                 printf("Ошибка памяти");
                 if (word != NULL)
@@ -60,7 +49,49 @@ int main(int argc, char *argv[])
                 word = NULL;
             }
 
+            if (read_word_from_file(file2, &word, &len_word) == MEMORY_ERROR)
+            {
+                printf("Ошибка памяти");
+                if (word != NULL)
+                    free(word);
+                fclose(file1);
+                fclose(file2);
+                fclose(file_result);
+                return MEMORY_ERROR;
+            }
+
+            if (len_word > 0)
+            {
+                fprintf(file_result, "%s ", word);
+                free(word);
+                word = NULL;
+            }
+        }
+
+        while (!feof(file1))
+        {
             if (read_word_from_file(file1, &word, &len_word) == MEMORY_ERROR)
+            {
+                printf("Ошибка памяти");
+                if (word != NULL)
+                    free(word);
+                fclose(file1);
+                fclose(file2);
+                fclose(file_result);
+                return MEMORY_ERROR;
+            }
+
+            if (len_word > 0)
+            {
+                fprintf(file_result, "%s ", word);
+                free(word);
+                word = NULL;
+            }
+        }
+
+        while (!feof(file2))
+        {
+            if (read_word_from_file(file2, &word, &len_word) == MEMORY_ERROR)
             {
                 printf("Ошибка памяти");
                 if (word != NULL)
@@ -82,18 +113,12 @@ int main(int argc, char *argv[])
         fclose(file1);
         fclose(file2);
         fclose(file_result);
-        printf("Лексемы записаны в файл: %s\n", argv[4]);
+        printf("Лексемы записаны в файл: %s\n", argv[argc - 1]);
         break;
 
     case 'a':
-        if (argc != 4)
-        {
-            printf("Ошибка ввода\n");
-            return INPUT_ERROR;
-        }
-
         FILE *input = fopen(argv[2], "r");
-        FILE *output = fopen(argv[3], "w");
+        FILE *output = fopen(argv[argc - 1], "w");
 
         if (input == NULL || output == NULL)
         {
@@ -206,7 +231,7 @@ int main(int argc, char *argv[])
 
         fclose(input);
         fclose(output);
-        printf("Файл %s преобразован в файл %s\n", argv[2], argv[3]);
+        printf("Файл %s преобразован в файл %s\n", argv[2], argv[argc - 1]);
         break;
 
     default:

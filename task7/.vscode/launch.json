@@ -7,9 +7,17 @@
             "request": "launch",
             "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
             "args": [
-                "-a",
+                "-r",
                 "a.txt",
                 "b.txt",
+                "b.txt",
+                "b.txt",
+                "b.txt",
+                "b.txt",
+                "b.txt",
+                "b.txt",
+                "b.txt",
+                "res.txt"
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

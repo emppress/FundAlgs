@@ -15,7 +15,6 @@ status read_word_from_file(FILE *file, char **word, int *len_word)
     *word = (char *)malloc(capacity * sizeof(char));
     if (*word == NULL)
     {
-        printf("Ошибка памяти\n");
         return MEMORY_ERROR;
     }
 
@@ -27,7 +26,6 @@ status read_word_from_file(FILE *file, char **word, int *len_word)
             char *for_resize = (char *)realloc(*word, capacity);
             if (for_resize == NULL)
             {
-                printf("Ошибка памяти\n");
                 free(word);
                 return MEMORY_ERROR;
             }

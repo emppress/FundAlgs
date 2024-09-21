@@ -7,9 +7,8 @@
             "request": "launch",
             "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
             "args": [
-                "-na",
-                "t.txt",
-                "res.txt",
+                "-a",
+                "a.txt",
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

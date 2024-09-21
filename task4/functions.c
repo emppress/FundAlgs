@@ -55,12 +55,24 @@ void count_symbols(FILE *in, FILE *out)
 
 void replace_symbols(FILE *in, FILE *out)
 {
-    int c;
+    int c, i;
+    char num_base16[2];
     while ((c = fgetc(in)) != EOF)
     {
         if (isdigit(c))
             fputc(c, out);
         else
-            fprintf(out, "%X", c);
+        {
+            i = 0;
+            while (c)
+            {
+                num_base16[i++] = (c % 16 > 9) ? c % 16 - 10 + 'A' : c % 16 + '0';
+                c /= 16;
+            }
+            if (i > 0)
+                fputc(num_base16[1], out);
+            if (i > 1)
+                fputc(num_base16[0], out);
+        }
     }
 }

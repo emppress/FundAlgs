@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     }
 
     double eps;
-    if (string_to_double(argv[1], &eps) != OK)
+    if (string_to_double(argv[1], &eps) != OK || eps <= 0.0)
     {
         printf("Input ERROR\n");
         return INPUT_ERROR;

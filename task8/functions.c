@@ -47,7 +47,7 @@ status read_num_from_file(FILE *file, char *word, int *len_word, int *base)
         if (*len_word == CAPACITY)
             return INPUT_ERROR;
     }
-    word[*len_word] = '\000';
+    word[*len_word] = '\0';
     return OK;
 }
 

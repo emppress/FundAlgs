@@ -31,7 +31,9 @@ status string_to_double(const char *str, double *result)
         else if ((str[i] < '0' || str[i] > '9') && !(str[i] == '-' && i == 0))
             return INPUT_ERROR;
     }
-    if (sscanf(str, "%lf", result) != 1)
+    char *endptr;
+    *result = strtod(str, &endptr);
+    if (*result == HUGE_VAL || *result == -HUGE_VAL || *endptr != '\0')
         return INPUT_ERROR;
     return OK;
 }

@@ -37,6 +37,7 @@ status natural_nums(const long x, int **result, int *size)
     return OK;
 }
 
+// enum
 int is_prime(const long x)
 {
     if (x <= 1)

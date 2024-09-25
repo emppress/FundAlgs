@@ -37,6 +37,14 @@ int main(int argc, char *argv[])
         double *coefs = (double *)malloc(3 * sizeof(double));
         if (permutations == NULL || coefs == NULL)
         {
+            if (!permutations)
+            {
+                for (int i = 0; i < 6; i++)
+                    free(permutations[i]);
+                free(permutations);
+            }
+            if (!coefs)
+                free(coefs);
             printf("Ошибка памяти\n");
             return MEMORY_ERROR;
         }
@@ -136,6 +144,7 @@ int main(int argc, char *argv[])
         else if (st == INPUT_ERROR)
         {
             printf("Ошибка ввода\n");
+            return INPUT_ERROR;
         }
 
         if (res_t == 1)

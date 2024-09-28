@@ -74,10 +74,10 @@ status transform_str(const char *src, char **dest)
     return SUCCESS;
 }
 
-status randomly_concatenate(const char **strings, int count_stings, unsigned long seed, char **dest)
+status randomly_concatenate(char **strings, int count_stings, unsigned long seed, char **dest, int first_param)
 {
     int i, capasity = 0, rand_n, count_remained = count_stings;
-    for (i = 0; i < count_stings; i++)
+    for (i = first_param; i < count_stings + first_param; i++)
     {
         if (INT_MAX - my_strlen(strings[i]) < capasity)
             return MEMORY_ERROR;
@@ -107,7 +107,7 @@ status randomly_concatenate(const char **strings, int count_stings, unsigned lon
         if (used[rand_n] == '1')
             continue;
 
-        concatenate(strings[rand_n], *dest);
+        concatenate(strings[rand_n + first_param], *dest);
         used[rand_n] = '1';
         count_remained--;
     }

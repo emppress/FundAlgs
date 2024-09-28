@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
         }
 
         char *conccatenated_str = NULL;
-        if (randomly_concatenate(argv + 3, count_strings, seed, &conccatenated_str) != SUCCESS)
+        if (randomly_concatenate(argv, count_strings, seed, &conccatenated_str, 3) != SUCCESS)
         {
             printf("Memory error\n");
             return MEMORY_ERROR;

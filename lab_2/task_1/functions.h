@@ -19,7 +19,7 @@ int my_strlen(char const *str);
 status my_strrev(const char *src, char **dest);
 status up_odd_str(const char *src, char **dest);
 status transform_str(const char *src, char **dest);
-status randomly_concatenate(const char **strings, int count_stings, unsigned long seed, char **dest);
+status randomly_concatenate(char **strings, int count_stings, unsigned long seed, char **dest, int first_param);
 void concatenate(const char *src, char *dest);
 status string_to_uint(const char *str, unsigned long *result);
 

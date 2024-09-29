@@ -27,7 +27,7 @@ int main()
         break;
     }
 
-    if (is_kaprekar(NULL, 1, 16, "1") != SUCCESS)
+    if (is_kaprekar(1, 16, "1") != SUCCESS)
     {
         printf("Input error\n");
         return INPUT_ERROR;

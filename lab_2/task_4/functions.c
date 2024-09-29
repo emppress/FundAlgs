@@ -135,7 +135,7 @@ status sum_base(char *number_1, char *number_2, int base, unsigned long *res)
     return SUCCESS;
 }
 
-status is_kaprekar(int *result, int count_numbers, int base, ...)
+status is_kaprekar(int count_numbers, int base, ...)
 {
     va_list args;
     va_start(args, base);

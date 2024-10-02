@@ -137,6 +137,8 @@ status sum_base(char *number_1, char *number_2, int base, unsigned long *res)
 
 status is_kaprekar(int count_numbers, int base, ...)
 {
+    if (base < 2 || base > 32)
+        return INPUT_ERROR;
     va_list args;
     va_start(args, base);
     char number[CAPACITY], left[CAPACITY];

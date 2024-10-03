@@ -3,7 +3,8 @@
 int main()
 {
     found *res, *cur;
-    status err = search_str_in_files("ggg", 2, &res, "text.txt", "b.txt");
+    char flag = '1';
+    status err = search_str_in_files("rrr", 2, &res, "text.txt", "a.txt");
 
     if (err == INPUT_ERROR)
     {
@@ -15,12 +16,16 @@ int main()
     while (cur)
     {
         found *next = cur->next;
+        flag = 0;
         printf("File: %s line: %d, char: %d;\n", cur->file_name, cur->n_line, cur->n_char);
         free(cur->file_name);
         free(cur);
         cur = next;
     }
-
+    if (flag)
+    {
+        printf("Substring not found\n");
+    }
     if (err == FILE_OPEN_ERROR)
     {
         printf("Some files could not be opened\n");

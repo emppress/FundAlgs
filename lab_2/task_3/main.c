@@ -3,7 +3,7 @@
 int main()
 {
     found *res, *cur;
-    status err = search_str_in_files("ggg", 2, &res, "text.txt", "a.txt");
+    status err = search_str_in_files("ggg", 2, &res, "text.txt", "b.txt");
 
     if (err == INPUT_ERROR)
     {
@@ -14,8 +14,11 @@ int main()
     cur = res;
     while (cur)
     {
+        found *next = cur->next;
         printf("File: %s line: %d, char: %d;\n", cur->file_name, cur->n_line, cur->n_char);
-        cur = cur->next;
+        free(cur->file_name);
+        free(cur);
+        cur = next;
     }
 
     if (err == FILE_OPEN_ERROR)
@@ -27,15 +30,6 @@ int main()
     {
         printf("Memory error\n");
         return MEMORY_ERROR;
-    }
-
-    cur = res;
-    while (cur)
-    {
-        found *next = cur->next;
-        free(cur->file_name);
-        free(cur);
-        cur = next;
     }
     return SUCCESS;
 }

@@ -292,6 +292,11 @@ int oversprintf(char *str, const char *format, ...)
             i += 2;
             free(res);
         }
+        else if (format[i] == '%' && i < len_format - 1 && format[i + 1] == '%')
+        {
+            count += sprintf(str + count, "%%");
+            i++;
+        }
         else if (format[i] == '%' && i < len_format - 1)
         {
             char cur_format[7];
@@ -457,10 +462,15 @@ int overfprintf(FILE *file, const char *format, ...)
             char *res;
             if (res = memory_dump(&fx, sizeof(float)))
             {
-                count += fprintf(file, res);
+                count = count + fprintf(file, res);
             }
             i += 2;
             free(res);
+        }
+        else if (format[i] == '%' && i < len_format - 1 && format[i + 1] == '%')
+        {
+            count = fprintf(file, "%%");
+            i++;
         }
         else if (format[i] == '%' && i < len_format - 1)
         {

@@ -2,15 +2,15 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: gcc.exe сборка активного файла",
-            "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
+            "label": "C/C++: gcc сборка активного файла",
+            "command": "/usr/bin/gcc",
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
                 "${workspaceFolder}/*.c",
-                "${workspaceFolder}/*.h",
+                "-lm",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${fileDirname}/main"
             ],
             "options": {
                 "cwd": "${fileDirname}"

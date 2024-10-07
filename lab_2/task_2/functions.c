@@ -21,7 +21,7 @@ status geometric_mean(double *res, int count, ...)
             return OVERFLOW_ERROR;
         }
     }
-    *res = pow(*res, 1.0 / count);
+    *res = pow(*res, (double)1.0 / count);
     va_end(args);
     return SUCCESS;
 }

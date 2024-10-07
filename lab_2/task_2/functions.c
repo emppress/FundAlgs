@@ -38,7 +38,7 @@ status fast_double_pow(double base, int degree, double *res)
         state = SUCCESS;
     }
 
-    else if (degree % 2)
+    else if (degree & 1)
     {
         state = fast_double_pow(base, degree - 1, res);
         *res *= base;

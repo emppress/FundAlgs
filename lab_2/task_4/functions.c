@@ -135,9 +135,9 @@ status sum_base(char *number_1, char *number_2, int base, unsigned long *res)
     return SUCCESS;
 }
 
-status is_kaprekar(int count_numbers, int base, ...)
+status is_kaprekar(int count_numbers, char *ans, int base, ...)
 {
-    if (base < 2 || base > 32)
+    if (base < 2 || base > 36)
         return INPUT_ERROR;
     va_list args;
     va_start(args, base);
@@ -175,12 +175,12 @@ status is_kaprekar(int count_numbers, int base, ...)
         if (!flag)
         {
             convert_to_xbase(x, base, number);
-            printf("%s - NO\n", number);
+            ans[i] = '-';
         }
         else
         {
             convert_to_xbase(x, base, number);
-            printf("%s - YES\n", number);
+            ans[i] = '+';
         }
     }
     va_end(args);

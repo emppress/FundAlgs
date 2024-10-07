@@ -55,6 +55,7 @@ status search_str_in_files(char *substring, int count_files, found **result, ...
     va_list args;
     va_start(args, result);
 
+    status state = SUCCESS;
     char c, *name_file;
     FILE *file;
     int idx_substr, n_line, n_char, n_line_answ, n_char_answ, count_new_str;
@@ -67,7 +68,7 @@ status search_str_in_files(char *substring, int count_files, found **result, ...
         if (!(file = fopen(name_file, "r")))
         {
             va_end(args);
-            return FILE_OPEN_ERROR;
+            state = FILE_OPEN_ERROR;
         }
 
         idx_substr = 0;
@@ -127,5 +128,5 @@ status search_str_in_files(char *substring, int count_files, found **result, ...
         fclose(file);
     }
     va_end(args);
-    return SUCCESS;
+    return state;
 }

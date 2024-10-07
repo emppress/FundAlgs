@@ -105,7 +105,7 @@ void convert_to_xbase(int num, int base, char *result)
 
 char *CV(int x, int base)
 {
-    if (base < 2 || base > 32)
+    if (base < 2 || base > 36)
         base = 10;
 
     char *str = (char *)malloc(33 * sizeof(char));
@@ -215,7 +215,7 @@ int oversprintf(char *str, const char *format, ...)
             int base = va_arg(args, int);
             long long res_to;
             i += 2;
-            if (base < 2 || base > 32)
+            if (base < 2 || base > 36)
                 base = 10;
             for (int j = 0; j < strlen(str_to); ++j)
             {
@@ -233,7 +233,7 @@ int oversprintf(char *str, const char *format, ...)
             int base = va_arg(args, int);
             long long res_TO;
             i += 2;
-            if (base < 2 || base > 32)
+            if (base < 2 || base > 36)
                 base = 10;
             for (int j = 0; j < strlen(str_TO); ++j)
             {
@@ -291,11 +291,6 @@ int oversprintf(char *str, const char *format, ...)
             }
             i += 2;
             free(res);
-        }
-        else if (format[i] == '%' && i < len_format - 1 && format[i + 1] == '%')
-        {
-            count += sprintf(str + count, "%%");
-            i++;
         }
         else if (format[i] == '%' && i < len_format - 1)
         {
@@ -390,7 +385,7 @@ int overfprintf(FILE *file, const char *format, ...)
             int base = va_arg(args, int);
             long long res_to;
             i += 2;
-            if (base < 2 || base > 32)
+            if (base < 2 || base > 36)
                 base = 10;
             for (int j = 0; j < strlen(str_to); ++j)
             {
@@ -408,7 +403,7 @@ int overfprintf(FILE *file, const char *format, ...)
             int base = va_arg(args, int);
             long long res_TO;
             i += 2;
-            if (base < 2 || base > 32)
+            if (base < 2 || base > 36)
                 base = 10;
             for (int j = 0; j < strlen(str_TO); ++j)
             {
@@ -462,15 +457,10 @@ int overfprintf(FILE *file, const char *format, ...)
             char *res;
             if (res = memory_dump(&fx, sizeof(float)))
             {
-                count = count + fprintf(file, res);
+                count += fprintf(file, res);
             }
             i += 2;
             free(res);
-        }
-        else if (format[i] == '%' && i < len_format - 1 && format[i + 1] == '%')
-        {
-            count = fprintf(file, "%%");
-            i++;
         }
         else if (format[i] == '%' && i < len_format - 1)
         {

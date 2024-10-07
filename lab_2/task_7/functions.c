@@ -23,7 +23,7 @@ status dichotomy_method(double *res, double left, double right, double eps, doub
 
 double func1(double x)
 {
-    return x - 10;
+    return x - 11.2232;
 }
 
 double func2(double x)
@@ -33,12 +33,12 @@ double func2(double x)
 
 double func3(double x)
 {
-    return x * x + 4;
+    return x * x + 10 * x - 4;
 }
 
 double func4(double x)
 {
-    return x + x * x + 3 * x * x * x;
+    return x + x * x + 3 * x * x * x + 1;
 }
 
 double func5(double x)

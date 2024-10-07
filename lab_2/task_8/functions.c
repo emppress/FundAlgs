@@ -3,7 +3,7 @@
 status sum_any_base_all_numbers(char **result, int base, int count_numbers, ...)
 {
     *result = NULL;
-    if (base < 2 || base > 32)
+    if (base < 2 || base > 36)
         return INPUT_ERROR;
 
     char *ptr_number, *number;
@@ -59,7 +59,7 @@ status sum_any_base_all_numbers(char **result, int base, int count_numbers, ...)
             va_end(args);
             free(number);
             free(res);
-            return MEMORY_ERROR;
+            return INPUT_ERROR;
         }
 
         if (len_num + 2 > capacity)

@@ -27,6 +27,6 @@ typedef struct Point
 
 int is_convex(int count_corners, ...);
 status find_polynom(double *res, double x, int n, ...);
-status is_kaprekar(int count_numbers, int base, ...);
+status is_kaprekar(int count_numbers, char *ans, int base, ...);
 
 #endif

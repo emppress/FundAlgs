@@ -16,11 +16,11 @@ int main()
         break;
 
     case SUCCESS:
-        printf("%lf\n", result);
+        printf("Geometric mean: %lf\n", result);
         break;
     }
 
-    switch (fast_double_pow(2.0, -10, &result))
+    switch (fast_double_pow(2.0, 10, &result))
     {
 
     case OVERFLOW_ERROR:
@@ -29,7 +29,7 @@ int main()
         break;
 
     case SUCCESS:
-        printf("%lf\n", result);
+        printf("Fast pow: %lf\n", result);
         break;
     }
 

@@ -4,7 +4,7 @@ int main()
 {
     found *res, *cur;
     char flag = '1';
-    status err = search_str_in_files("rrr", 2, &res, "text.txt", "a.txt");
+    status err = search_str_in_files("rrrtrrr", 2, &res, "text.txt", "a.txt");
 
     if (err == INPUT_ERROR)
     {

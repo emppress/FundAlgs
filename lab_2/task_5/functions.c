@@ -2,27 +2,54 @@
 
 char *Ro(int x)
 {
-    if (x < 1 || x > 3999)
-    {
-        return NULL;
-    }
 
-    char *str;
-    if (!(str = (char *)malloc(20 * sizeof(char))))
+    char *str, *for_realloc;
+    int capacity = 6, len_str;
+    if (!(str = (char *)malloc(capacity * sizeof(char))))
     {
         return NULL;
     }
-    str[0] = '\0';
+    if (x == 0)
+    {
+        strcpy(str, "Nulla");
+        return str;
+    }
+    if (x < 0)
+    {
+        x = abs(x);
+        str[0] = '-';
+        str[1] = '\0';
+        len_str = 1;
+    }
+    else
+    {
+        str[0] = '\0';
+        len_str = 0;
+    }
 
     char symbols[13][3] = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
     int value[] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
 
     for (int i = 0; i < 13; ++i)
     {
+        int len_symbol = strlen(symbols[i]);
         while (x >= value[i])
         {
+            if (capacity < len_str + len_symbol + 1)
+            {
+                capacity += (len_symbol * 4);
+                for_realloc = (char *)realloc(str, capacity * sizeof(char));
+                if (!for_realloc)
+                {
+                    free(str);
+                    return NULL;
+                }
+                str = for_realloc;
+            }
+
             strcat(str, symbols[i]);
             x -= value[i];
+            len_str += len_symbol;
         }
     }
     return str;

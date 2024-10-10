@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
     char buff[BUFSIZ];
     int count;
     printf("\t\tTest 1\n");
-    count = oversprintf(buff, "%d %d %Ro %.2f", 3888, 3, 4, 3.22);
+    count = oversprintf(buff, "%d %Ro %Ro %Ro %.2f", 3888, -120, 200000, 0, 3.22);
     printf("string: '%s'; count symbols: %d\n\n", buff, count);
 
     printf("\t\tTest 2\n");
@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     printf("string: '%s'; count symbols: %d\n\n", buff, count);
 
     printf("\t\tTest 4\n");
-    count = oversprintf(buff, "strokaaaaa %Roover", 100000000);
+    count = oversprintf(buff, "strokaaaaa %Roover", 100000);
     printf("string: '%s'; count symbols: %d\n\n", buff, count);
 
     printf("\t\tTest 5\n");
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     printf("string: '%s'; count symbols: %d\n\n", buff, count);
 
     printf("\t\tTest 6\n");
-    count = oversprintf(buff, "strokaaaaa %", 100000000);
+    count = oversprintf(buff, "strokaaaaa %", 100000);
     printf("string: '%s'; count symbols: %d\n\n", buff, count);
 
     printf("\t\tTest 7\n");
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 
     overfprintf(output, "rororoRo%% %Ro\n", 6);
 
-    overfprintf(output, "ss %Roodddr\n", 567);
+    overfprintf(output, "%Ro\n", 322222222);
 
     overfprintf(output, " %Roooon\n", 100000000);
 

@@ -7,10 +7,13 @@ int main(int argc, char *argv[])
     unsigned int uns_int;
 
     puts("........................................OVERSSCANF TEST........................................\n");
+
+    char str[20];
+
     puts("< Test_1 >");
     puts("String: 'This is string: ccc 123 1000 and 4555'");
-    count = oversscanf("This is string:ccc 123 1000 and 4555", "This is string :%Cv %d  %CV and%d", &a, 16, &b, &c, 10, &d);
-    printf("Output: %d, %d, %d, %d; Count scanned: %d\n\n\n", a, b, c, d, count);
+    count = oversscanf("Thisssssss is string:ccc 123 1000 and 4555", "%5ssssss is string :%Cv %d  %CV and%d", str, &a, 16, &b, &c, 10, &d);
+    printf("Output: %d, %d, %d, %d, %s; Count scanned: %d\n\n\n", a, b, c, d, str, count);
 
     puts("< Test_2 >");
     puts("String: 'This is the number 10: 0010011'");

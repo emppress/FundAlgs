@@ -230,7 +230,7 @@ int overfscanf(FILE *stream, const char *format, ...)
             int ind_format = 1;
             subformat[0] = '%';
             i++;
-            while (new_format[i] != '%' && new_format[i] != '\0')
+            while (new_format[i] != '%' && new_format[i] != '\0' && new_format[i - 1] != 's')
             {
                 subformat[ind_format++] = new_format[i];
                 i++;
@@ -328,7 +328,7 @@ int oversscanf(const char *buffer, const char *format, ...)
             int ind_format = 1;
             subformat[0] = '%';
             i++;
-            while (new_format[i] != '%' && new_format[i] != '\0')
+            while (new_format[i] != '%' && new_format[i] != '\0' && new_format[i - 1] != 's')
             {
                 subformat[ind_format++] = new_format[i];
                 i++;

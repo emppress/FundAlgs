@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 
     puts("< Test_1 >");
     puts("String: 'This is string: ccc 123 1000 and 4555'");
-    count = oversscanf("Thisssssss is string:ccc 123 1000 and 4555", "%5ssssss is string :%Cv %d  %CV and%d", str, &a, 16, &b, &c, 10, &d);
+    count = oversscanf("Thissvvv is string:ccc 123 1000 and 4555", "%5svvv is string :%Cv %d  %CV and%d", str, &a, 16, &b, &c, 10, &d);
     printf("Output: %d, %d, %d, %d, %s; Count scanned: %d\n\n\n", a, b, c, d, str, count);
 
     puts("< Test_2 >");

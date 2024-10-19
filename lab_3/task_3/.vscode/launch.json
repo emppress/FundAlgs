@@ -12,7 +12,7 @@
             "args": [
                 "in.txt",
                 "-d",
-                "out.txt"
+                "/home/empress/FundAlgs/lab_3/task_3/out.txt"
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

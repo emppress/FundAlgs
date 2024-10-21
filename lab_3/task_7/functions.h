@@ -30,5 +30,6 @@ status stack_init(Stack *stack);
 status stack_push(Stack *stack, char c);
 status stack_pop(Stack *stack, char *top);
 status stack_destroy(Stack *stack);
+void free_buf();
 
 #endif

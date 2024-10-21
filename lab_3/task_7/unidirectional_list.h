@@ -43,7 +43,7 @@ status list_init(UList *list);
 size_t list_size(UList *list);
 int is_empty(UList *list);
 int date_cmp(const Date *date_1, const Date *date_2);
-status list_insert(UList *list, Liver *liver);
+status list_insert(UList *list, const Liver *liver);
 status list_delete_node(UList *list, const Liver *liver);
 status list_find(UList *list, const Liver *liver, Liver **found);
 status liver_change(UList *list, const Liver *to_change, const Liver *new_data);

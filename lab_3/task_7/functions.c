@@ -9,28 +9,35 @@ void print_menu()
     printf(">>> ");
 }
 
+void free_buf()
+{
+    while (getchar() != '\n')
+        ;
+}
+
 status get_liver(Liver *liver)
 {
+    size_t count = 0;
     if (!liver)
         return MEMORY_ERROR;
 
     printf("Enter surname: ");
-    scanf("%s", liver->surname);
+    count += scanf("%s", liver->surname);
     printf("Enter name: ");
-    scanf("%s", liver->name);
+    count += scanf("%s", liver->name);
     printf("Enter patronymic(if no enter '-'): ");
-    scanf("%s", liver->patronymic);
+    count += scanf("%s", liver->patronymic);
     if (liver->patronymic[0] == '-')
         liver->patronymic[0] = '\0';
     printf("Enter birth date(dd.mm.yyyy): ");
-    scanf("%d.%d.%d", &liver->birth_date.day, &liver->birth_date.month, &liver->birth_date.year);
+    count += scanf("%d.%d.%d", &liver->birth_date.day, &liver->birth_date.month, &liver->birth_date.year);
     getchar();
     printf("Enter sex(M/W): ");
-    scanf("%c", &liver->sex);
+    count += scanf("%c", &liver->sex);
     printf("Enter income: ");
-    scanf("%lf", &liver->income);
+    count += scanf("%lf", &liver->income);
 
-    if (liver_validate(liver))
+    if (count != 8 || liver_validate(liver))
         return INPUT_ERROR;
     return SUCCESS;
 }

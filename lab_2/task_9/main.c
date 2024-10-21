@@ -5,7 +5,7 @@ int main()
     double res[128];
 
     int len_ans = 0;
-    switch (has_a_finite_representation(2, res, &len_ans, 1, 0.992999999999222323232999999999999999999999999999999932329))
+    switch (has_a_finite_representation(36, res, &len_ans, 1, 0.25))
     {
     case BASE_ERROR:
         printf("Base error\n");

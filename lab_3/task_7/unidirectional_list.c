@@ -31,7 +31,7 @@ int date_cmp(const Date *date_1, const Date *date_2)
     return date_1->day - date_2->day;
 }
 
-status list_insert(UList *list, Liver *liver)
+status list_insert(UList *list, const Liver *liver)
 {
     Node *new_node, *temp;
     size_t i;
@@ -151,10 +151,20 @@ status liver_change(UList *list, const Liver *to_change, const Liver *new_data)
     if (!list || !to_change || !new_data)
         return MEMORY_ERROR;
 
-    if (list_find(list, to_change, &update_liver) == MISSING)
-        return MISSING;
+    if (date_cmp(&to_change->birth_date, &new_data->birth_date) == 0)
+    {
+        if (list_find(list, to_change, &update_liver) == MISSING)
+            return MISSING;
 
-    *update_liver = *new_data;
+        *update_liver = *new_data;
+    }
+    else
+    {
+        if (list_delete_node(list, to_change) == MISSING)
+            return MISSING;
+        if (list_insert(list, new_data) == MEMORY_ERROR)
+            return MEMORY_ERROR;
+    }
     return SUCCESS;
 }
 
@@ -172,8 +182,9 @@ status list_file_print(UList *list, FILE *file)
         fprintf(file, "Surname: %s;\nName: %s;\nPatronymic: %s;\nBirth date: %02d.%02d.%04d;\nSex: %c;\nIncome: %.3lf;\n",
                 temp->data.surname, temp->data.name, temp->data.patronymic, temp->data.birth_date.day, temp->data.birth_date.month, temp->data.birth_date.year, temp->data.sex, temp->data.income);
         temp = temp->next;
+        fputs("_______________________________________________\n", file);
     }
-    fputs("_______________________________________________\n", file);
+
     return SUCCESS;
 }
 
@@ -259,7 +270,7 @@ status list_file_scan(UList *list, FILE *file)
         count_read += fscanf(file, "Birth date: %d.%d.%d;\n", &temp.birth_date.day, &temp.birth_date.month, &temp.birth_date.year);
         count_read += fscanf(file, "Sex: %c;\n", &temp.sex);
         count_read += fscanf(file, "Income: %lf;\n", &temp.income);
-        if (liver_validate(&temp))
+        if (count_read != 8 || liver_validate(&temp))
             continue;
         if (count_read == 8)
             list_insert(list, &temp);

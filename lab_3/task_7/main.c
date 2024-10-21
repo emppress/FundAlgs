@@ -3,10 +3,6 @@
 
 int main(int argc, char **argv)
 {
-    // TODO: Мб сделвть проверку на == файлов; сделать проверки для статус кодов функций;
-    // мб переделать считывание double; потестить undo
-    // в UNDO возможно нужно удалять n запрашиваемое у юзера
-
     UList list, list_new_data, list_old_data;
     Stack stack_modifications;
     FILE *input;
@@ -93,12 +89,25 @@ int main(int argc, char **argv)
                 printf("\nLiver is missing\n");
                 break;
             }
+            if (state == MEMORY_ERROR)
+            {
+                printf("Liver change: memory error\n");
+                break;
+            }
             if (state == SUCCESS)
             {
                 printf("\nSuccess! Liver update\n");
-                list_push(&list_old_data, &to_change);
-                list_push(&list_new_data, &new_data);
-                stack_push(&stack_modifications, '2');
+                if (list_push(&list_old_data, &to_change) == MEMORY_ERROR ||
+                    list_push(&list_new_data, &new_data) == MEMORY_ERROR ||
+                    stack_push(&stack_modifications, '2') == MEMORY_ERROR)
+                {
+                    list_destroy(&list_old_data);
+                    list_destroy(&list_new_data);
+                    list_destroy(&list);
+                    stack_destroy(&stack_modifications);
+                    printf("Memory error\n");
+                    return MEMORY_ERROR;
+                }
                 count_modifications++;
             }
             break;
@@ -118,8 +127,16 @@ int main(int argc, char **argv)
                 break;
             }
             printf("Success! New liver added\n");
-            stack_push(&stack_modifications, '3');
-            list_push(&list_new_data, &new_liver);
+            if (stack_push(&stack_modifications, '3') == MEMORY_ERROR ||
+                list_push(&list_new_data, &new_liver) == MEMORY_ERROR)
+            {
+                list_destroy(&list_old_data);
+                list_destroy(&list_new_data);
+                list_destroy(&list);
+                stack_destroy(&stack_modifications);
+                printf("Memory error\n");
+                return MEMORY_ERROR;
+            }
             count_modifications++;
             break;
         }
@@ -138,8 +155,16 @@ int main(int argc, char **argv)
                 break;
             }
             printf("Success! Liver deleted\n");
-            list_push(&list_old_data, &to_delete);
-            stack_push(&stack_modifications, '4');
+            if (list_push(&list_old_data, &to_delete) ||
+                stack_push(&stack_modifications, '4'))
+            {
+                list_destroy(&list_old_data);
+                list_destroy(&list_new_data);
+                list_destroy(&list);
+                stack_destroy(&stack_modifications);
+                printf("Memory error\n");
+                return MEMORY_ERROR;
+            }
             count_modifications++;
             break;
         }
@@ -162,10 +187,22 @@ int main(int argc, char **argv)
         }
         case '6':
         {
-            size_t i;
+            int i, count_undo;
             char c;
             Liver to_change, new_data;
-            for (i = 0; i < count_modifications / 2; ++i)
+            printf("Enter count undo: ");
+            if (!scanf("%d", &count_undo))
+            {
+                printf("Input error! Try again\n");
+                break;
+            }
+            if (count_undo < 0 || count_undo > (count_modifications / 2))
+            {
+                printf("You can undo %ld changes\n", count_modifications / 2);
+                break;
+            }
+
+            for (i = 0; i < count_undo; ++i)
             {
                 stack_pop(&stack_modifications, &c);
                 if (c == '2')
@@ -201,6 +238,7 @@ int main(int argc, char **argv)
             break;
         }
         }
+        free_buf();
         print_menu();
     }
     stack_destroy(&stack_modifications);

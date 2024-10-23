@@ -8,8 +8,9 @@
 #include <stdarg.h>
 #include <math.h>
 #include <string.h>
+#include <float.h>
 
-#define EPS 1e-10
+#define EPS DBL_EPSILON
 
 typedef enum Status
 {

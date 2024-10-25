@@ -7,51 +7,108 @@ void init_tree(Node *root)
     root->son = NULL;
 }
 
-status build_tree(Node *root, char *str)
+status build_tree(FILE *input, FILE *output)
 {
     char c;
-    Node *temp;
+    Node *temp, *root;
+    root = (Node *)malloc(sizeof(Node));
+    init_tree(root);
+    if (!root)
+        return MEMORY_ERROR;
+
     temp = root;
-    for (int i = 0; i < strlen(str); ++i)
+    while ((c = getc(input)))
     {
-        if (str[i] == '(')
+        if (c == EOF)
+        {
+            print_tree(root, 0, output);
+            break;
+        }
+        if (c == '\n')
+        {
+            print_tree(root, 0, output);
+            fprintf(output, "\n");
+            delete_tree(root);
+            root = (Node *)malloc(sizeof(Node));
+            if (!root)
+                return MEMORY_ERROR;
+            init_tree(root);
+            temp = root;
+        }
+        else if (isspace(c))
+            continue;
+        else if (c == '(')
         {
             temp->son = (Node *)malloc(sizeof(Node));
+            if (!temp->son)
+            {
+                delete_tree(root);
+                return MEMORY_ERROR;
+            }
             temp->son->prev = temp;
             temp = temp->son;
             temp->brother = NULL;
             temp->son = NULL;
         }
-        else if (str[i] == ')')
+        else if (c == ')')
         {
             temp = temp->prev;
         }
-        else if (str[i] == ',')
+        else if (c == ',')
         {
             temp->brother = (Node *)malloc(sizeof(Node));
+            if (!temp->brother)
+            {
+                delete_tree(root);
+                return MEMORY_ERROR;
+            }
             temp->brother->prev = temp->prev;
             temp = temp->brother;
             temp->son = NULL;
             temp->brother = NULL;
         }
-        else if (isalpha(str[i]))
+        else
         {
-            temp->data = str[i];
+            temp->data = c;
         }
     }
+    delete_tree(root);
 }
 
-void print_tree(Node *root, int level)
+void print_tree(Node *root, int level, FILE *output)
 {
     if (!root)
         return;
     for (int i = 0; i < level; i++)
     {
-        printf("\t|");
+        fprintf(output, "  ");
     }
-    printf("%c\n", root->data);
+    fprintf(output, "%c\n", root->data);
     if (root->son)
-        print_tree(root->son, level + 1);
+        print_tree(root->son, level + 1, output);
     if (root->brother)
-        print_tree(root->brother, level);
+        print_tree(root->brother, level, output);
+}
+
+void delete_tree(Node *root)
+{
+    if (root->brother)
+        delete_tree(root->brother);
+    if (root->son)
+        delete_tree(root->son);
+
+    free(root);
+}
+
+status validate_input(int argc, char **argv)
+{
+    char full_in[BUFSIZ], full_out[BUFSIZ];
+    if (argc != 3)
+        return INPUT_ERROR;
+
+    if (!realpath(argv[1], full_in) || !realpath(argv[2], full_out))
+        return INPUT_ERROR;
+    if (!strcmp(full_in, full_out))
+        return INPUT_ERROR;
+    return SUCCESS;
 }

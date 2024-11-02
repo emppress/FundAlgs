@@ -155,6 +155,10 @@ status insert_term(Polynom *polynom, int degree, int coef)
     }
     if (polynom->head->degree == degree)
     {
+        if (coef > 0 && INT_MAX - coef < polynom->head->coef)
+            return MEMORY_ERROR;
+        else if (coef < 0 && INT_MIN - coef > polynom->head->coef)
+            return MEMORY_ERROR;
         polynom->head->coef += coef;
         if (polynom->head->coef == 0)
         {
@@ -183,6 +187,10 @@ status insert_term(Polynom *polynom, int degree, int coef)
         }
         if (temp->next->degree == degree)
         {
+            if (coef > 0 && INT_MAX - coef < temp->next->coef)
+                return MEMORY_ERROR;
+            else if (coef < 0 && INT_MIN - coef > temp->next->coef)
+                return MEMORY_ERROR;
             temp->next->coef += coef;
             if (temp->next->coef == 0)
             {
@@ -221,7 +229,11 @@ status create_polynom(Polynom *polynom, const char *expression)
             }
             while (*symbol != 0 && isdigit(*symbol))
             {
+                if (INT_MAX / 10 < coef)
+                    return MEMORY_ERROR;
                 coef *= 10;
+                if (INT_MAX - (*symbol - '0') < coef)
+                    return MEMORY_ERROR;
                 coef += *symbol - '0';
                 symbol++;
             }
@@ -245,7 +257,11 @@ status create_polynom(Polynom *polynom, const char *expression)
 
                 while (*symbol != 0 && isdigit(*symbol))
                 {
+                    if (INT_MAX / 10 < degree)
+                        return MEMORY_ERROR;
                     degree *= 10;
+                    if (INT_MAX - (*symbol - '0') < degree)
+                        return MEMORY_ERROR;
                     degree += *symbol - '0';
                     symbol++;
                 }
@@ -265,7 +281,11 @@ status create_polynom(Polynom *polynom, const char *expression)
             sign = 1;
             while (*symbol != 0 && isdigit(*symbol))
             {
+                if (INT_MAX / 10 < coef)
+                    return MEMORY_ERROR;
                 coef *= 10;
+                if (INT_MAX - (*symbol - '0') < coef)
+                    return MEMORY_ERROR;
                 coef += *symbol - '0';
                 symbol++;
             }
@@ -328,6 +348,9 @@ status mult(Polynom *polynom_1, Polynom *polynom_2, Polynom *res)
         temp_2 = polynom_2->head;
         while (temp_2)
         {
+            int check_overflov = temp_1->coef * temp_2->coef;
+            if (INT_MAX - temp_1->degree < temp_2->degree || (temp_1->coef && check_overflov / temp_1->coef != temp_2->coef))
+                return MEMORY_ERROR;
             if (insert_term(res, temp_1->degree + temp_2->degree, temp_1->coef * temp_2->coef) == MEMORY_ERROR)
                 return MEMORY_ERROR;
             temp_2 = temp_2->next;
@@ -444,6 +467,9 @@ status __mult(Polynom *polynom_1, int degree, int coef, Polynom *res)
     temp_1 = polynom_1->head;
     while (temp_1)
     {
+        int check_overflov = temp_1->coef * coef;
+        if (INT_MAX - temp_1->degree < degree || (temp_1->coef && check_overflov / temp_1->coef != coef))
+            return MEMORY_ERROR;
         if (insert_term(res, temp_1->degree + degree, temp_1->coef * coef) == MEMORY_ERROR)
             return MEMORY_ERROR;
         temp_1 = temp_1->next;

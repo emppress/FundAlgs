@@ -12,10 +12,10 @@ status build_tree(FILE *input, FILE *output)
     char c;
     Node *temp, *root;
     root = (Node *)malloc(sizeof(Node));
-    init_tree(root);
+
     if (!root)
         return MEMORY_ERROR;
-
+    init_tree(root);
     temp = root;
     while ((c = getc(input)))
     {

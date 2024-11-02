@@ -194,7 +194,8 @@ status scan_data_from_files(char **files, int count_files, External_List *ex_lis
             new_node->data.coords = cur_coords;
 
             if (count_scan != 14 || validate_date(&new_node->data.stop_time) || validate_date(&new_node->data.departure_time) ||
-                (new_node->data.marker != 'i' && new_node->data.marker != 's' && new_node->data.marker != 'f'))
+                (new_node->data.marker != 'i' && new_node->data.marker != 's' && new_node->data.marker != 'f') ||
+                date_cmp(&new_node->data.stop_time, &new_node->data.departure_time) > 0)
             {
                 free(new_node);
                 continue;

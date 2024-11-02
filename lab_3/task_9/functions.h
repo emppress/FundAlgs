@@ -19,9 +19,16 @@ typedef enum Status
     MISSING
 } status;
 
+typedef struct String
+{
+    char *arr;
+    size_t capacity;
+    size_t len;
+} String;
+
 typedef struct Node
 {
-    char *data;
+    String data;
     size_t count_repeats;
     struct Node *left, *right;
 } Node;
@@ -29,7 +36,7 @@ typedef struct Node
 typedef struct Tree
 {
     Node *root;
-    int (*comparator)(const char *, const char *);
+    int (*comparator)(const String *, const String *);
 } Tree;
 
 typedef struct Lnode
@@ -47,13 +54,15 @@ typedef struct List
 status init_tree(Tree *tree);
 status delete_tree(Tree *tree);
 status build_tree_from_file(Tree *tree, const char *separators, FILE *input);
-status find_string(const char *str, Tree *tree, Node **found);
-status find_longest_word(Tree *tree, char *str);
-status find_shortest_word(Tree *tree, char *str);
+status find_string(const String *str, Tree *tree, Node **found);
+status find_longest_word(Tree *tree, String *str);
+status find_shortest_word(Tree *tree, String *str);
 int max_depth(Node *root);
 status print_n_most_frequent_words(Tree *tree, int n);
 status upload_tree_to_file(Tree *tree, FILE *file, char separator);
 status list_destroy(List *list);
 void print_menu();
 void free_buf();
+status string_scan(String *str);
+status delete_string_content(String *string);
 #endif

@@ -2,16 +2,108 @@
 
 #define max(a, b) (a > b) ? (a) : (b)
 
-int string_comparator(const char *str_1, const char *str_2)
+status string_init(String *string)
 {
-    int len_1, len_2;
-    len_1 = strlen(str_1);
-    len_2 = strlen(str_2);
-    if (len_1 != len_2)
+    if (!string)
+        return MEMORY_ERROR;
+    string->capacity = 1;
+    string->len = 0;
+    if (!(string->arr = (char *)malloc(sizeof(char))))
+        return MEMORY_ERROR;
+    string->arr[0] = '\0';
+    return SUCCESS;
+}
+
+status delete_string_content(String *string)
+{
+    if (!string)
+        return MEMORY_ERROR;
+    free(string->arr);
+    string->arr = NULL;
+    string->len = 0;
+    string->capacity = 0;
+    return SUCCESS;
+}
+
+int string_compare(const String *str_1, const String *str_2)
+{
+    if (str_1->len != str_2->len)
+        return str_1->len - str_2->len;
+    return strcmp(str_1->arr, str_2->arr);
+}
+
+int string_equivalence_relation(String *str_1, String *str_2)
+{
+    return strcmp(str_1->arr, str_2->arr) == 0;
+}
+
+status string_dup(String *dest, String *sourse)
+{
+    if (!dest || !sourse)
+        return MEMORY_ERROR;
+
+    dest->capacity = sourse->capacity;
+    dest->len = sourse->len;
+    if (!sourse->arr)
     {
-        return len_1 - len_2;
+        dest->arr = NULL;
+        return SUCCESS;
     }
-    return strcmp(str_1, str_2);
+    dest->arr = (char *)malloc(sourse->capacity * sizeof(char));
+    if (!dest->arr)
+        return MEMORY_ERROR;
+    strcpy(dest->arr, sourse->arr);
+    return SUCCESS;
+}
+
+String *string_destroy(String *str)
+{
+    if (!str)
+        return NULL;
+    free(str->arr);
+    free(str);
+    return NULL;
+}
+
+status add_char_to_string(String *str, char ch)
+{
+    if (!str)
+        return MEMORY_ERROR;
+    if (str->capacity == 0)
+    {
+        if (string_init(str))
+            return MEMORY_ERROR;
+    }
+    if (str->capacity == str->len + 1)
+    {
+        char *for_realloc;
+        str->capacity *= 2;
+        for_realloc = (char *)realloc(str->arr, str->capacity * sizeof(char));
+        if (!for_realloc)
+            return MEMORY_ERROR;
+        str->arr = for_realloc;
+    }
+    str->arr[str->len++] = ch;
+    return SUCCESS;
+}
+
+status string_scan(String *str)
+{
+    char ch;
+    if (!str)
+        return MEMORY_ERROR;
+
+    if (string_init(str))
+        return MEMORY_ERROR;
+    while ((ch = getchar()) != EOF && !isspace(ch))
+    {
+        if (add_char_to_string(str, ch))
+            return MEMORY_ERROR;
+    }
+    if (add_char_to_string(str, '\0'))
+        return MEMORY_ERROR;
+    ungetc(ch, stdin);
+    return SUCCESS;
 }
 
 void print_menu()
@@ -33,7 +125,7 @@ status init_tree(Tree *tree)
 {
     if (!tree)
         return MEMORY_ERROR;
-    tree->comparator = string_comparator;
+    tree->comparator = string_compare;
     tree->root = NULL;
     return SUCCESS;
 }
@@ -44,7 +136,7 @@ void delete_tree_kernel(Node *root)
         return;
     delete_tree_kernel(root->left);
     delete_tree_kernel(root->right);
-    free(root->data);
+    delete_string_content(&root->data);
     free(root);
 }
 
@@ -58,7 +150,7 @@ status delete_tree(Tree *tree)
     return SUCCESS;
 }
 
-status add_node(Tree *tree, char *word, size_t size_word)
+status add_node(Tree *tree, String *word)
 {
     Node **temp = NULL;
     int res_cmp;
@@ -68,7 +160,7 @@ status add_node(Tree *tree, char *word, size_t size_word)
     temp = &tree->root;
     while (*temp != NULL)
     {
-        if ((res_cmp = tree->comparator(word, (*temp)->data)) < 0)
+        if ((res_cmp = tree->comparator(word, &(*temp)->data)) < 0)
         {
             temp = &(*temp)->left;
         }
@@ -90,44 +182,56 @@ status add_node(Tree *tree, char *word, size_t size_word)
             return MEMORY_ERROR;
         (*temp)->left = (*temp)->right = NULL;
         (*temp)->count_repeats = 1;
-        (*temp)->data = (char *)malloc((size_word + 1) * sizeof(char));
-        if (!(*temp)->data)
+        if (string_dup(&(*temp)->data, word) == MEMORY_ERROR)
+        {
+            free(*temp);
+            *temp = NULL;
             return MEMORY_ERROR;
-        strcpy((*temp)->data, word);
+        }
         return SUCCESS;
     }
 }
 
 status build_tree_from_file(Tree *tree, const char *separators, FILE *input)
 {
-    char c, word[BUFSIZ];
-    size_t size_word = 0;
+    char c;
+    String word;
     if (!tree || !separators || !input)
         return MEMORY_ERROR;
 
+    if (string_init(&word))
+        return MEMORY_ERROR;
     while (c = getc(input))
     {
         if (c == EOF || strchr(separators, c))
         {
-            if (size_word)
+            if (word.len)
             {
-                word[size_word] = '\0';
-                if (add_node(tree, word, size_word) == MEMORY_ERROR)
+                if (add_char_to_string(&word, '\0'))
+                {
+                    delete_string_content(&word);
+                    return MEMORY_ERROR;
+                }
+                if (add_node(tree, &word) == MEMORY_ERROR)
                     return MEMORY_ERROR;
             }
-            size_word = 0;
+            delete_string_content(&word);
             if (c == EOF)
                 break;
         }
         else if (!isspace(c))
         {
-            word[size_word++] = c;
+            if (add_char_to_string(&word, c))
+            {
+                delete_string_content(&word);
+                return MEMORY_ERROR;
+            }
         }
     }
     return SUCCESS;
 }
 
-status find_string(const char *str, Tree *tree, Node **found)
+status find_string(const String *str, Tree *tree, Node **found)
 {
     Node *temp;
     int res_cmp;
@@ -137,7 +241,7 @@ status find_string(const char *str, Tree *tree, Node **found)
     temp = tree->root;
     while (temp != NULL)
     {
-        if ((res_cmp = tree->comparator(str, temp->data)) == 0)
+        if ((res_cmp = tree->comparator(str, &temp->data)) == 0)
         {
             *found = temp;
             return SUCCESS;
@@ -150,7 +254,7 @@ status find_string(const char *str, Tree *tree, Node **found)
     return MISSING;
 }
 
-status find_longest_word(Tree *tree, char *str)
+status find_longest_word(Tree *tree, String *str)
 {
     Node *temp = NULL;
     if (!tree || !str)
@@ -162,11 +266,12 @@ status find_longest_word(Tree *tree, char *str)
     while (temp->right != NULL)
         temp = temp->right;
 
-    strcpy(str, temp->data);
+    if (string_dup(str, &temp->data))
+        return MEMORY_ERROR;
     return SUCCESS;
 }
 
-status find_shortest_word(Tree *tree, char *str)
+status find_shortest_word(Tree *tree, String *str)
 {
     Node *temp = NULL;
     if (!tree || !str)
@@ -178,7 +283,8 @@ status find_shortest_word(Tree *tree, char *str)
     while (temp->left != NULL)
         temp = temp->left;
 
-    strcpy(str, temp->data);
+    if (string_dup(str, &temp->data))
+        return MEMORY_ERROR;
     return SUCCESS;
 }
 
@@ -299,7 +405,7 @@ status print_n_most_frequent_words(Tree *tree, int n)
     temp = list.head;
     for (i = 0; i < n; ++i)
     {
-        printf("%zu) %s, count: %zu;\n", i + 1, temp->data->data, temp->data->count_repeats);
+        printf("%zu) %s, count: %zu;\n", i + 1, temp->data->data.arr, temp->data->count_repeats);
         temp = temp->next;
     }
     list_destroy(&list);
@@ -314,7 +420,7 @@ status upload_tree_to_file_kernel(Node *root, FILE *file, char separator)
 
     for (i = 0; i < root->count_repeats; ++i)
     {
-        fprintf(file, "%s%c", root->data, separator);
+        fprintf(file, "%s%c", root->data.arr, separator);
     }
     if (root->left)
         upload_tree_to_file_kernel(root->left, file, separator);

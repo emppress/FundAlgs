@@ -6,9 +6,11 @@
             "request": "launch",
             "program": "${workspaceFolder}/main",
             "args": [
-                "in.txt",
-                "U",
-                "O"
+                "out.txt",
+                "[",
+                "]",
+                "{",
+                "}"
             ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

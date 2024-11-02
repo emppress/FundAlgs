@@ -8,24 +8,24 @@ int main(int argc, char **argv)
     int count;
     Polynom adder, polynom_1, polynom_2, res;
     status state;
+    /*
     if (argc != 2)
     {
         printf("Input error. Enter (program_file) (input_file)\n");
         return INPUT_ERROR;
     }
-
+    */
     init_polynom(&adder);
-    input = fopen(argv[1], "r");
+    input = fopen("in.txt", "r");
     if (!input)
     {
         printf("File open error\n");
         return FILE_OPEN_ERROR;
     }
 
-    while (!feof(input))
+    while ((ch = getc(input)) != EOF)
     {
         command[0] = '\0';
-        ch = getc(input);
         if (isspace(ch))
             continue;
         if (ch == '%')
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
         {
             command[0] = ch;
             count = 0;
-            fscanf(input, "%[^(]5s", command + 1);
+            fscanf(input, "%3[^(]s", command + 1);
             if (strcmp(command, "Add") && strcmp(command, "Sub") &&
                 strcmp(command, "Mult") && strcmp(command, "Div") &&
                 strcmp(command, "Mod") && strcmp(command, "Eval") &&
@@ -307,7 +307,7 @@ int main(int argc, char **argv)
             state = SUCCESS;
             if (getc(input) != '(')
                 state = INPUT_ERROR;
-            if (fscanf(input, "%lf", &x) != 1 || getc(input) != ')' || getc(input) != ';' || state || eval(&adder, x, &res_double))
+            if (state || fscanf(input, "%lf", &x) != 1 || getc(input) != ')' || getc(input) != ';' || eval(&adder, x, &res_double))
             {
                 destroy_polynom(&adder);
                 fclose(input);
@@ -319,7 +319,7 @@ int main(int argc, char **argv)
         else if (!strcmp(command, "Diff"))
         {
             state = get_expression(&polynom_1, &polynom_2, input, &count);
-            if (state == INPUT_ERROR || state == MEMORY_ERROR)
+            if (state == INPUT_ERROR || state == MEMORY_ERROR || getc(input) != ';')
             {
                 destroy_polynom(&polynom_1);
                 destroy_polynom(&adder);
@@ -351,6 +351,13 @@ int main(int argc, char **argv)
             adder = res;
             printf("Diff result: ");
             print_polynom(&adder);
+        }
+        else
+        {
+            destroy_polynom(&adder);
+            fclose(input);
+            printf("Input error\n");
+            return INPUT_ERROR;
         }
     }
     destroy_polynom(&adder);

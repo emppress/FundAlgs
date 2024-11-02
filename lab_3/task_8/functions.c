@@ -369,11 +369,28 @@ status eval(Polynom *polynom, double x, double *result)
 
     temp = polynom->head;
     *result = 0;
+    if (x == 0)
+    {
+        if (!temp)
+            return SUCCESS;
+        while (temp->next)
+        {
+            temp = temp->next;
+        }
+        if (temp->degree == 0)
+            *result = temp->coef;
+        return SUCCESS;
+    }
     while (temp)
     {
         for (i = 0; i < last_degree - temp->degree; ++i)
         {
             *result *= x;
+            if (*result == INFINITY || *result == -INFINITY)
+            {
+                *result = (x < 0 && ((last_degree - temp->degree) & 2)) ? (-INFINITY) : (INFINITY);
+                return SUCCESS;
+            }
         }
         *result += temp->coef;
         last_degree = temp->degree;

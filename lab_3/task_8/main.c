@@ -2,17 +2,25 @@
 
 int main(int argc, char **argv)
 {
-
     FILE *input;
     char command[5];
     char ch;
     int count;
     Polynom adder, polynom_1, polynom_2, res;
     status state;
+    if (argc != 2)
+    {
+        printf("Input error. Enter (program_file) (input_file)\n");
+        return INPUT_ERROR;
+    }
+
     init_polynom(&adder);
-    input = fopen("in.txt", "r");
+    input = fopen(argv[1], "r");
     if (!input)
+    {
+        printf("File open error\n");
         return FILE_OPEN_ERROR;
+    }
 
     while (!feof(input))
     {

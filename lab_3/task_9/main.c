@@ -51,16 +51,24 @@ int main(int argc, char **argv)
         {
         case '1':
         {
-            char word[BUFSIZ];
+            String word;
             Node *found;
             printf("Enter word: ");
-            scanf("%s", word);
-            if (find_string(word, &tree, &found) == MISSING)
+            getchar();
+            if (string_scan(&word))
             {
-                printf("Word missing in the text\n");
+                printf("Memory error\n");
+                delete_string_content(&word);
                 break;
             }
-            printf("%s - %zu time(s)\n", word, found->count_repeats);
+            if (find_string(&word, &tree, &found) == MISSING)
+            {
+                printf("Word missing in the text\n");
+                delete_string_content(&word);
+                break;
+            }
+            printf("%s - %zu time(s)\n", word.arr, found->count_repeats);
+            delete_string_content(&word);
             break;
         }
         case '2':
@@ -80,24 +88,26 @@ int main(int argc, char **argv)
         }
         case '3':
         {
-            char word[BUFSIZ];
-            if (find_longest_word(&tree, word) == MISSING)
+            String word;
+            if (find_longest_word(&tree, &word) == MISSING)
             {
                 printf("File is empty\n");
                 break;
             }
-            printf("Found - %s\n", word);
+            printf("Found - %s\n", word.arr);
+            delete_string_content(&word);
             break;
         }
         case '4':
         {
-            char word[BUFSIZ];
-            if (find_shortest_word(&tree, word) == MISSING)
+            String word;
+            if (find_shortest_word(&tree, &word) == MISSING)
             {
                 printf("File is empty\n");
                 break;
             }
-            printf("Found - %s\n", word);
+            printf("Found - %s\n", word.arr);
+            delete_string_content(&word);
             break;
         }
         case '5':
@@ -133,6 +143,11 @@ int main(int argc, char **argv)
         }
         case '7':
         {
+            if (tree.root)
+            {
+                printf("Tree is not empty, try to upload tree to file (6)\n");
+                break;
+            }
             char file_path[BUFSIZ];
             printf("Enter file name: ");
             scanf("%s", file_path);

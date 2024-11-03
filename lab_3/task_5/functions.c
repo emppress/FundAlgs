@@ -56,6 +56,8 @@ status validate_name(const char *str)
 
 void delete_student_arr(Student *arr, size_t size)
 {
+    if (!arr)
+        return;
     size_t i;
     for (i = 0; i < size; ++i)
     {
@@ -231,7 +233,7 @@ status surname_or_name_search(Student *student_arr, size_t size, const char *key
                 for_realloc = (Student **)realloc(*found_arr, sizeof(Student *) * capacity);
                 if (!for_realloc)
                 {
-                    delete_student_arr(**found_arr, *found_size);
+                    free(*found_arr);
                     return MEMORY_ERROR;
                 }
                 *found_arr = for_realloc;

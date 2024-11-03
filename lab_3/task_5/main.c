@@ -37,7 +37,7 @@ int main(int argc, char **argv)
             char _id[BUFF_SIZE];
             ull id;
             printf("Enter ID: ");
-            if (scanf("%s", _id) != 1 || string_to_ull(_id, &id))
+            if (scanf("%255s", _id) != 1 || string_to_ull(_id, &id))
             {
                 printf("Input error! Try again\n");
                 break;
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 
         case '2':
         {
-            Student **found_arr;
+            Student **found_arr = NULL;
             char surname[BUFF_SIZE];
             size_t found_size, i;
             char c = 0;
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
                 break;
             }
             printf("Enter search key: ");
-            scanf("%s", surname);
+            scanf("%255s", surname);
             if (surname_or_name_search(arr, size, surname, &found_arr, &found_size, c) == MEMORY_ERROR)
             {
                 printf("Memory error\n");
@@ -77,6 +77,7 @@ int main(int argc, char **argv)
             if (found_size == 0)
             {
                 printf("Student not found\n");
+                free(found_arr);
                 break;
             }
             for (i = 0; i < found_size; ++i)
@@ -111,7 +112,7 @@ int main(int argc, char **argv)
             char filename[BUFF_SIZE];
             FILE *output;
             printf("Enter file: ");
-            scanf("%s", filename);
+            scanf("%255s", filename);
             output = fopen(filename, "w");
             if (!output)
             {
@@ -131,7 +132,7 @@ int main(int argc, char **argv)
             ull id;
 
             printf("Enter file: ");
-            scanf("%s", filename);
+            scanf("%255s", filename);
             output = fopen(filename, "w");
             if (!output)
             {
@@ -139,7 +140,7 @@ int main(int argc, char **argv)
                 break;
             }
             printf("Enter ID: ");
-            if (scanf("%s", _id) != 1 || string_to_ull(_id, &id))
+            if (scanf("%255s", _id) != 1 || string_to_ull(_id, &id))
             {
                 printf("Input error! Try again\n");
                 fclose(output);
@@ -158,7 +159,7 @@ int main(int argc, char **argv)
         }
         }
         free_buf();
-        print_menu();
+        //    print_menu();
     }
     delete_student_arr(arr, size);
 }

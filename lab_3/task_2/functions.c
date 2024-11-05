@@ -26,8 +26,6 @@ void delete_vector_arr(vector **arr, size_t size)
 
     for (i = 0; i < size; ++i)
     {
-        if ((*arr)[i].data)
-            printf("%lf\n", (*arr)[i].data[0]);
         free((*arr)[i].data);
     }
     free(*arr);
@@ -67,14 +65,7 @@ status search_longest_vectors(vector **res, size_t *count_res, size_t count_vect
 
     for (size_t i = 0; i < count_vectors; ++i)
     {
-        vector temp = va_arg(args, vector);
-        if (copy_vector(&temp, &all_vectors[i]))
-        {
-            free(temp_res);
-            free(max_len_vector);
-            delete_vector_arr(&all_vectors, i);
-            return MEMORY_ERROR;
-        }
+        all_vectors[i] = va_arg(args, vector);
     }
     for (size_t i = 0; i < count_norms; i++)
     {
@@ -91,7 +82,7 @@ status search_longest_vectors(vector **res, size_t *count_res, size_t count_vect
             {
                 delete_vector_arr(&temp_res, *count_res);
                 free(max_len_vector);
-                delete_vector_arr(&all_vectors, count_vectors);
+                free(all_vectors);
                 va_end(args);
                 return INPUT_ERROR;
             }
@@ -112,7 +103,7 @@ status search_longest_vectors(vector **res, size_t *count_res, size_t count_vect
             {
                 delete_vector_arr(&temp_res, *count_res);
                 free(max_len_vector);
-                delete_vector_arr(&all_vectors, count_vectors);
+                free(all_vectors);
                 va_end(args);
                 return INPUT_ERROR;
             }
@@ -121,7 +112,7 @@ status search_longest_vectors(vector **res, size_t *count_res, size_t count_vect
     }
     va_end(args);
 
-    delete_vector_arr(&all_vectors, count_vectors);
+    free(all_vectors);
     free(max_len_vector);
     *res = temp_res;
     return SUCCESS;

@@ -14,12 +14,12 @@ int main()
     {
     case MEMORY_ERROR:
         printf("Memory error\n");
-        free(res);
+        delete_vector_arr(&res, count_res);
         return MEMORY_ERROR;
 
     case INPUT_ERROR:
         printf("Input error\n");
-        free(res);
+        delete_vector_arr(&res, count_res);
         return MEMORY_ERROR;
     case SUCCESS:
         for (size_t i = 0; i < count_res - 1; ++i)
@@ -38,6 +38,6 @@ int main()
         }
     }
 
-    free(res);
+    delete_vector_arr(&res, count_res);
     return 0;
 }

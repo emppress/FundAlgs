@@ -25,6 +25,7 @@ typedef struct Vector
 
 typedef double (*norm_t)(vector *, void *);
 
+void delete_vector_arr(vector **arr, size_t size);
 double spectr_norm(vector *vec, void *args);
 double inf_norm(vector *vec, void *args);
 double p_norm(vector *vec, void *args);

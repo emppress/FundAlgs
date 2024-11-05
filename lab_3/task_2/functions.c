@@ -1,5 +1,39 @@
 #include "functions.h"
 
+status copy_vector(const vector *sourse, vector *dest)
+{
+    size_t i;
+    if (!sourse || !dest)
+        return MEMORY_ERROR;
+
+    dest->n = sourse->n;
+    dest->data = (double *)malloc(dest->n * sizeof(double));
+    if (!dest->data)
+        return MEMORY_ERROR;
+
+    for (i = 0; i < dest->n; ++i)
+    {
+        dest->data[i] = sourse->data[i];
+    }
+    return SUCCESS;
+}
+
+void delete_vector_arr(vector **arr, size_t size)
+{
+    size_t i;
+    if (!arr || !*arr)
+        return;
+
+    for (i = 0; i < size; ++i)
+    {
+        if ((*arr)[i].data)
+            printf("%lf\n", (*arr)[i].data[0]);
+        free((*arr)[i].data);
+    }
+    free(*arr);
+    *arr = NULL;
+}
+
 status search_longest_vectors(vector **res, size_t *count_res, size_t count_vectors, size_t count_norms, ...)
 {
     size_t capacity, size_max_len_vector;
@@ -33,7 +67,14 @@ status search_longest_vectors(vector **res, size_t *count_res, size_t count_vect
 
     for (size_t i = 0; i < count_vectors; ++i)
     {
-        all_vectors[i] = va_arg(args, vector);
+        vector temp = va_arg(args, vector);
+        if (copy_vector(&temp, &all_vectors[i]))
+        {
+            free(temp_res);
+            free(max_len_vector);
+            delete_vector_arr(&all_vectors, i);
+            return MEMORY_ERROR;
+        }
     }
     for (size_t i = 0; i < count_norms; i++)
     {
@@ -48,9 +89,9 @@ status search_longest_vectors(vector **res, size_t *count_res, size_t count_vect
             norma_res = norma(&(all_vectors[j]), arg);
             if (norma_res < 0)
             {
-                free(all_vectors);
-                free(temp_res);
+                delete_vector_arr(&temp_res, *count_res);
                 free(max_len_vector);
+                delete_vector_arr(&all_vectors, count_vectors);
                 va_end(args);
                 return INPUT_ERROR;
             }
@@ -67,13 +108,20 @@ status search_longest_vectors(vector **res, size_t *count_res, size_t count_vect
         }
         for (size_t j = 0; j < size_max_len_vector; ++j)
         {
-            temp_res[(*count_res)++] = all_vectors[max_len_vector[j]];
+            if (copy_vector(&all_vectors[max_len_vector[j]], &temp_res[(*count_res)++]))
+            {
+                delete_vector_arr(&temp_res, *count_res);
+                free(max_len_vector);
+                delete_vector_arr(&all_vectors, count_vectors);
+                va_end(args);
+                return INPUT_ERROR;
+            }
         }
         temp_res[(*count_res)++] = separator;
     }
     va_end(args);
 
-    free(all_vectors);
+    delete_vector_arr(&all_vectors, count_vectors);
     free(max_len_vector);
     *res = temp_res;
     return SUCCESS;

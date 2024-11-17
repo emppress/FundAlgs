@@ -7,8 +7,13 @@ int main(int argc, char **argv)
     String line;
     status err;
     size_t number_of_string = 0;
+    if (argc != 2 || !argv[1])
+    {
+        printf("Input error. Enter <prog_file><your_prog>\n");
+        return INPUT_ERROR;
+    }
 
-    input = fopen("in.txt", "r");
+    input = fopen(argv[1], "r");
     if (!input)
     {
         printf("File open error\n");

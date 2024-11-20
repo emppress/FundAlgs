@@ -57,6 +57,11 @@ public:
     binary_int operator*(binary_int &bi)
     {
         int res = 0, a = _value, b = bi._value;
+        if (b < 0)
+        {
+            a = negation(a);
+            b = negation(b);
+        }
         while (b != 0)
         {
             if (b & 1)

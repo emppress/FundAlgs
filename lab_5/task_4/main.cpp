@@ -38,12 +38,7 @@ public:
         _im = (_im * value._real - _real * value._im) / divider;
     }
 
-    double argument() const
-    {
-        if (_real == 0)
-            return 90.;
-        return atan(_im / _real) * 180 / M_PI;
-    }
+    double argument() const { return atan(_im / _real) * 180 / M_PI; }
 
     double im_accessor() const { return _im; }
     double real_accerssor() const { return _real; }

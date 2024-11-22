@@ -29,31 +29,31 @@ private:
 public:
     binary_int(int value = 0) : _value(value) {}
     binary_int operator-() { return binary_int(negation(_value)); }
-    binary_int operator+(binary_int &bi)
+    binary_int operator+(binary_int const &bi)
     {
         int new_value = add(_value, bi._value);
         return binary_int(new_value);
     }
 
-    binary_int &operator+=(binary_int &bi)
+    binary_int &operator+=(binary_int const &bi)
     {
         _value = add(_value, bi._value);
         return *this;
     }
 
-    binary_int operator-(binary_int &bi)
+    binary_int operator-(binary_int const &bi)
     {
         int new_value = add(_value, negation(bi._value));
         return binary_int(new_value);
     }
 
-    binary_int &operator-=(binary_int &bi)
+    binary_int &operator-=(binary_int const &bi)
     {
         _value = add(_value, negation(bi._value));
         return *this;
     }
 
-    binary_int operator*(binary_int &bi)
+    binary_int operator*(binary_int const &bi)
     {
         int res = 0, a = _value, b = bi._value;
         if (b < 0)
@@ -73,7 +73,7 @@ public:
         return binary_int(res);
     }
 
-    binary_int operator*=(binary_int &bi)
+    binary_int operator*=(binary_int const &bi)
     {
         int res = 0, a = _value, b = bi._value;
         if (b < 0)

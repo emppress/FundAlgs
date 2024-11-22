@@ -2,30 +2,29 @@
 #include <cmath>
 #include <bitset>
 
-int add(int value_1, int value_2)
-{
-    int logic_and = value_1 & value_2;
-
-    int keep = logic_and << 1;
-    int res = value_1 ^ value_2;
-    while (keep != 0)
-    {
-        logic_and = keep & res;
-        res = (keep ^ res);
-        keep = logic_and << 1;
-    }
-    return res;
-}
-
-int negation(int value)
-{
-    return add(~value, 1);
-}
-
 class binary_int
 {
 private:
     int _value;
+    int add(int value_1, int value_2)
+    {
+        int logic_and = value_1 & value_2;
+
+        int keep = logic_and << 1;
+        int res = value_1 ^ value_2;
+        while (keep != 0)
+        {
+            logic_and = keep & res;
+            res = (keep ^ res);
+            keep = logic_and << 1;
+        }
+        return res;
+    }
+
+    int negation(int value)
+    {
+        return add(~value, 1);
+    }
 
 public:
     binary_int(int value = 0) : _value(value) {}

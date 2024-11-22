@@ -6,7 +6,7 @@ class binary_int
 {
 private:
     int _value;
-    int add(int value_1, int value_2)
+    int static add(int value_1, int value_2)
     {
         int logic_and = value_1 & value_2;
 
@@ -21,7 +21,7 @@ private:
         return res;
     }
 
-    int negation(int value)
+    int static negation(int value)
     {
         return add(~value, 1);
     }
@@ -29,7 +29,7 @@ private:
 public:
     binary_int(int value = 0) : _value(value) {}
     binary_int operator-() { return binary_int(negation(_value)); }
-    binary_int operator+(binary_int const &bi)
+    binary_int operator+(binary_int const &bi) const
     {
         int new_value = add(_value, bi._value);
         return binary_int(new_value);
@@ -41,7 +41,7 @@ public:
         return *this;
     }
 
-    binary_int operator-(binary_int const &bi)
+    binary_int operator-(binary_int const &bi) const
     {
         int new_value = add(_value, negation(bi._value));
         return binary_int(new_value);
@@ -53,7 +53,7 @@ public:
         return *this;
     }
 
-    binary_int operator*(binary_int const &bi)
+    binary_int operator*(binary_int const &bi) const
     {
         int res = 0, a = _value, b = bi._value;
         if (b < 0)
@@ -118,8 +118,8 @@ public:
         return tmp;
     }
 
-    binary_int operator>>(int shift) { return binary_int(_value >> shift); }
-    binary_int operator<<(int shift) { return binary_int(_value << shift); }
+    binary_int operator>>(int shift) const { return binary_int(_value >> shift); }
+    binary_int operator<<(int shift) const { return binary_int(_value << shift); }
 
     binary_int &operator>>=(int shift)
     {
@@ -140,7 +140,7 @@ public:
 
     int value_accessor() { return _value; }
 
-    std::pair<binary_int, binary_int> get_pair()
+    std::pair<binary_int, binary_int> get_pair() const
     {
         short shift = sizeof(_value) << 2;
         std::pair<binary_int, binary_int> p;

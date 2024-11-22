@@ -25,17 +25,19 @@ public:
 
     void mult(const complex &value)
     {
+        double old_real = _real;
         _real = _real * value._real - _im * value._im;
-        _im = _real * value._im + _im * value._real;
+        _im = old_real * value._im + _im * value._real;
     }
 
     void div(const complex &value)
     {
         double divider = value._im * value._im + value._real * value._real;
+        double old_real = _real;
         if (divider == 0)
             throw std::overflow_error("Divide by zero exception");
         _real = (_real * value._real + _im * value._im) / divider;
-        _im = (_im * value._real - _real * value._im) / divider;
+        _im = (_im * value._real - old_real * value._im) / divider;
     }
 
     double argument() const { return atan(_im / _real) * 180 / M_PI; }

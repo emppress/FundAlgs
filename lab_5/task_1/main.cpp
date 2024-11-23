@@ -6,7 +6,7 @@ class binary_int
 {
 private:
     int _value;
-    int static add(int value_1, int value_2)
+    static int add(int value_1, int value_2)
     {
         int logic_and = value_1 & value_2;
 
@@ -101,8 +101,8 @@ public:
     }
     binary_int operator++(int)
     {
-        binary_int tmp(_value);
-        _value = add(_value, 1);
+        binary_int tmp(*this);
+        _value = add(_value, 1); // ++*this;
         return tmp;
     }
 
@@ -138,7 +138,7 @@ public:
         return out;
     }
 
-    int value_accessor() { return _value; }
+    int value_accessor() const { return _value; }
 
     std::pair<binary_int, binary_int> get_pair() const
     {
@@ -148,6 +148,9 @@ public:
         p.second = binary_int(_value & (add((1 << shift), negation(1))));
         return p;
     }
+
+public:
+    virtual ~binary_int() = default;
 };
 
 int main()

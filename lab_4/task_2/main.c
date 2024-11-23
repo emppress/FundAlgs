@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 
     for (i = 0; i < 26; ++i)
     {
-        init_array(&arrays[i], 'A' + i);
+        init_array(arrays + i, 'A' + i);
     }
 
     srand(time(NULL));

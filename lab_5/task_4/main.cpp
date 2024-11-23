@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 
-class complex
+class complex final
 {
 private:
     double _real, _im;
@@ -34,13 +34,13 @@ public:
     {
         double divider = value._im * value._im + value._real * value._real;
         double old_real = _real;
-        if (divider == 0)
+        if (fabs(divider) < __DBL_EPSILON__)
             throw std::overflow_error("Divide by zero exception");
         _real = (_real * value._real + _im * value._im) / divider;
         _im = (_im * value._real - old_real * value._im) / divider;
     }
 
-    double argument() const { return atan(_im / _real) * 180 / M_PI; }
+    double argument() const { return atan(_im / _real) * 180.0 / M_PI; }
 
     double im_accessor() const { return _im; }
     double real_accerssor() const { return _real; }
@@ -66,7 +66,7 @@ int main()
     {
         a.div(b);
     }
-    catch (std::overflow_error &e)
+    catch (std::overflow_error const &e)
     {
         std::cout << e.what() << std::endl;
     }
@@ -82,7 +82,7 @@ int main()
         std::cout << "a = ";
         a.info();
     }
-    catch (std::overflow_error &e)
+    catch (std::overflow_error const &e)
     {
         std::cout << e.what() << std::endl;
     }

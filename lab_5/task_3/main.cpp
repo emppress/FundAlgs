@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <string.h>
 
-class logical_values_array
+class logical_values_array final
 {
 private:
     unsigned int _value;
@@ -12,18 +12,18 @@ public:
     unsigned int value_accessor() const { return _value; }
     logical_values_array inversion() const { return logical_values_array(~_value); }
     logical_values_array conjunction(const logical_values_array &lva) const { return logical_values_array(lva.value_accessor() & _value); }
-    logical_values_array disjunction(logical_values_array &lva) const
+    logical_values_array disjunction(logical_values_array const &lva) const
     {
         logical_values_array tmp = lva.inversion();
         logical_values_array tmp_2 = this->inversion();
         return tmp_2.conjunction(tmp).inversion();
     }
 
-    logical_values_array implication(logical_values_array &lva) const { return this->inversion().disjunction(lva); }
+    logical_values_array implication(logical_values_array const &lva) const { return this->inversion().disjunction(lva); }
 
-    logical_values_array coimplication(logical_values_array &lva) const { return this->conjunction(lva.inversion()); }
+    logical_values_array coimplication(logical_values_array const &lva) const { return this->conjunction(lva.inversion()); }
 
-    logical_values_array add_mod2(logical_values_array &lva) const
+    logical_values_array add_mod2(logical_values_array const &lva) const
     {
         logical_values_array temp_1, temp_2;
         temp_1 = this->inversion().conjunction(lva);
@@ -31,22 +31,22 @@ public:
         return temp_1.disjunction(temp_2);
     }
 
-    logical_values_array equal(logical_values_array &lva) const
+    logical_values_array equal(logical_values_array const &lva) const
     {
         return this->add_mod2(lva).inversion();
     }
 
-    logical_values_array pirs(logical_values_array &lva) const
+    logical_values_array Pirs(logical_values_array const &lva) const
     {
         return this->disjunction(lva).inversion();
     }
 
-    logical_values_array sheffer(logical_values_array &lva) const
+    logical_values_array Sheffer(logical_values_array const &lva) const
     {
         return this->conjunction(lva).inversion();
     }
 
-    static bool equals(logical_values_array &lva_1, logical_values_array &lva_2)
+    static bool equals(logical_values_array const &lva_1, logical_values_array const &lva_2)
     {
         return lva_1.value_accessor() == lva_2.value_accessor();
     }
@@ -59,7 +59,7 @@ public:
         return (1ul << position) & _value;
     }
 
-    void get_str_value(char *str_value)
+    void get_str_value(char *str_value) const
     {
         if (!str_value)
             throw "Null string";

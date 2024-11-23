@@ -49,8 +49,18 @@ private:
     }
 
 public:
-    encoder(std::vector<std::byte> &key) : S(256), _key(key), x(0), y(0) {};
-    void set_key(std::vector<std::byte> const &key) { _key = key; }
+    encoder(std::vector<std::byte> &key) : S(256), _key(key), x(0), y(0)
+    {
+        if (key.size() == 0)
+            throw std::length_error("Zero key length");
+    }
+
+    void set_key(std::vector<std::byte> const &key)
+    {
+        if (key.size() == 0)
+            throw std::length_error("Zero key length");
+        _key = key;
+    }
 
     void encode(std::string const &input_name, std::string const &output_name)
     {

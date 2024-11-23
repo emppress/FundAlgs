@@ -13,7 +13,7 @@ std::ostream &operator<<(std::ostream &os, std::byte b)
     return os << char(std::to_integer<int>(b));
 }
 
-class encoder
+class encoder final
 {
 private:
     std::vector<std::byte> S, _key;
@@ -127,4 +127,5 @@ int main()
     encdr.set_key(encoder::generate_key(256));
     encdr.encode(a, b);
     encdr.encode(b, d);
+    return 0;
 }

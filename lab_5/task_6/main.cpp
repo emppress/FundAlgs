@@ -73,9 +73,24 @@ public:
             return *this;
         }
 
+        double *operator->() { return _ptr; }
+        double const *operator->() const { return _ptr; }
+        double &operator[](size_t shift)
+        {
+            return *(_ptr + shift);
+        }
+        double operator[](size_t shift) const
+        {
+            return *(_ptr + shift);
+        }
+
         size_t operator-(const iterator &iter) const { return _ptr - iter._ptr; }
-        bool operator==(const iterator &iter) { return _ptr == iter._ptr; };
-        bool operator!=(const iterator &iter) { return _ptr != iter._ptr; };
+        bool operator==(const iterator &iter) const { return _ptr == iter._ptr; };
+        bool operator!=(const iterator &iter) const { return _ptr != iter._ptr; };
+        bool operator>(const iterator &iter) const { return _ptr > iter._ptr; };
+        bool operator>=(const iterator &iter) const { return _ptr >= iter._ptr; };
+        bool operator<(const iterator &iter) const { return _ptr < iter._ptr; };
+        bool operator<=(const iterator &iter) const { return _ptr <= iter._ptr; };
     };
 
     vector(size_t count_elements, double default_value) : arr{new double[count_elements]},

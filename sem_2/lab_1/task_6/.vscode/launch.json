@@ -1,0 +1,37 @@
+{
+    "configurations": [
+        {
+            "name": "(gdb) Запустить",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/client2",
+            "args": [
+                "/home/empress/FundAlgs/sem_2/lab_1/task_6_new/ipc_func.h",
+                "/home/empress/FundAlgs/sem_2/lab_1/task_6_new/ipc_func.h",
+                "/home/empress/FundAlgs/sem_2/lab_1/task_6_new/ipc_func.h",
+                "/home/empress/FundAlgs/sem_2/lab_1/task_6_new/ipc_func.h",
+                "/home/empress/FundAlgs/sem_2/lab_1/task_6_new/ipc_func.h",
+                "/home/empress/FundAlgs/sem_2/lab_1/task_6_new/ipc_func.h",
+                "/home/empress/FundAlgs/sem_2/lab_1/task_6_new/ipc_func.h",
+                "/home/empress/FundAlgs/sem_2/lab_1/task_6_new/ipc_func.h",
+            ],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Включить автоматическое форматирование для gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Задать для варианта приложения дизассемблирования значение Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
